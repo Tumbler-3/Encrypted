@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html class="">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>3NCR¥PT3D</title>
+</head>
+
+<body>
+  <!-- <form action="/" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ encrypt_form }}
+    <p>Submit</p>
+    <input type="submit" class="btn-primary" name="encrypt">
+</form> -->
+<br>
+<form action="/" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ decrypt_form }}
+  <p>Submit</p>
+  <input type="submit" class="btn-primary" name="decrypt">
+</form>
+</body>
+
+</html>

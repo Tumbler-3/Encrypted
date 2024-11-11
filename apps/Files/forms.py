@@ -2,8 +2,8 @@ from django import forms
 
 
 class EncryptForm(forms.Form):
-    file = forms.FileField(allow_empty_file=False, required=True)
-    mail = forms.EmailField(required=True, empty_value=False)
+    file = forms.FileField(required=True)
+    mail = forms.EmailField(required=True)
 
 
 class DecryptForm(forms.Form):
