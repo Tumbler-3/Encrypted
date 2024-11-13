@@ -7,19 +7,126 @@
 </head>
 
 <body>
-  <!-- <form action="/" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ encrypt_form }}
-    <p>Submit</p>
-    <input type="submit" class="btn-primary" name="encrypt">
-</form> -->
-<br>
-<form action="/" method="post" enctype="multipart/form-data">
-  {% csrf_token %}
-  {{ decrypt_form }}
-  <p>Submit</p>
-  <input type="submit" class="btn-primary" name="decrypt">
-</form>
+
+
+  <button id="ChangeType">
+    <h2>Change Type of Encryption</h2>
+  </button>
+
+
+  <div id="symmforms" class="symm">
+    <h2>Symmetrical</h2>
+    <button id="ChangeSymm">
+      <h5>Change Type of Encryption</h5>
+    </button>
+    <form action="/" method="post" enctype="multipart/form-data" name="symm_en" id="ensymm" class="ensymm">
+      {% csrf_token %}
+      {{ encrypt_form }}
+      <p>Submit</p>
+      <input type="submit" class="btn-primary" name="encrypt">
+    </form>
+
+    <form action="/" method="post" enctype="multipart/form-data" name="symm_de" id="desymm" class="desymm">
+      {% csrf_token %}
+      {{ decrypt_form }}
+      <p>Submit</p>
+      <input type="submit" class="btn-primary" name="decrypt">
+    </form>
+  </div>
+
+
+  <div id="asymforms" class="asym">
+    <h2>Asymmetrical</h2>
+    <button id="ChangeAsym">
+      <h5>Change Type of Encryption</h5>
+    </button>
+    <form action="/" method="post" enctype="multipart/form-data" name="symm_en" id="enasym" class="enasym">
+      {% csrf_token %}
+      {{ encrypt_form }}
+      <p>Submit</p>
+      <input type="submit" class="btn-primary" name="encrypt">
+    </form>
+
+    <form action="/" method="post" enctype="multipart/form-data" name="symm_de" id="deasym" class="deasym">
+      {% csrf_token %}
+      {{ decrypt_form }}
+      <p>Submit</p>
+      <input type="submit" class="btn-primary" name="decrypt">
+    </form>
+  </div>
+
+
+  <script>
+    type = Boolean(true);
+    symm = Boolean(true);
+    asym = Boolean(true);
+
+    var type_button = document.getElementById("ChangeType");
+    var symm_button = document.getElementById("ChangeSymm");
+    var asym_button = document.getElementById("ChangeAsym");
+
+
+    type_button.addEventListener("click", function () {
+      var symmforms = document.getElementById("symmforms")
+      var asymforms = document.getElementById("asymforms")
+
+      if (type == false) {
+        symmforms.style.display = "block";
+        asymforms.style.display = "none";
+        type = true
+      }
+      else {
+        symmforms.style.display = "none";
+        asymforms.style.display = "block";
+        type = false;
+      }
+    });
+
+
+    symm_button.addEventListener("click", function () {
+      var enform = document.getElementById("ensymm")
+      var deform = document.getElementById("desymm")
+
+      if (symm == false) {
+        enform.style.display = "block";
+        deform.style.display = "none";
+        symm = true
+      }
+      else {
+        enform.style.display = "none";
+        deform.style.display = "block";
+        symm = false;
+      }
+    });
+
+
+    asym_button.addEventListener("click", function () {
+      var enform = document.getElementById("enasym")
+      var deform = document.getElementById("deasym")
+
+      if (asym == false) {
+        enform.style.display = "block";
+        deform.style.display = "none";
+        asym = true
+      }
+      else {
+        enform.style.display = "none";
+        deform.style.display = "block";
+        asym = false;
+      }
+    });
+  </script>
+  <style>
+    .asym {
+      display: none;
+    }
+    .desymm{
+      display: none;
+    }
+    .deasym{
+      display: none;
+    }
+  </style>
 </body>
 
 </html>
