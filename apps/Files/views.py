@@ -28,30 +28,50 @@ class CryptModelView(ListView):
         enform = EncryptForm(request.POST, request.FILES)
         deform = DecryptForm(request.POST, request.FILES)
 
-        if enform.is_valid() and ('encrypt' in request.POST):
-            newfile = FileModel.objects.create(file=enform.cleaned_data["file"])
-            # symm.symmetric_encryption(
-            #     filename=f'media/{enform.cleaned_data["file"]}', 
-            #     receiver=enform.cleaned_data['mail'])
-            asym.asymmetric_encryption(
-                filename=newfile.file.name, 
+        if enform.is_valid() and ('sym_encrypt' in request.POST):
+
+            newfile = FileModel.objects.create(
+                file=enform.cleaned_data["file"])
+
+            symm.symmetric_encryption(
+                filename=f'media/{enform.cleaned_data["file"]}',
                 receiver=enform.cleaned_data['mail'])
 
             return redirect('/')
 
-        elif deform.is_valid() and ('decrypt' in request.POST):
-            
-            # symm.symmetric_decryption(
-            #     filename=f'media/{deform.cleaned_data["file"]}', 
-            #     keyfile=f'media/{deform.cleaned_data["key"]}', 
-            #     file_type=f'{deform.cleaned_data["extension"]}',
-            #     receiver=deform.cleaned_data['mail'])
-            asym.asymmetric_decryption(
-                filename=f'media/{deform.cleaned_data["file"]}', 
-                privkey_file=f'media/{deform.cleaned_data["key"]}', 
+        elif deform.is_valid() and ('sym_decrypt' in request.POST):
+
+            symm.symmetric_decryption(
+                filename=f'media/{deform.cleaned_data["file"]}',
+                keyfile=f'media/{deform.cleaned_data["key"]}',
                 file_type=f'{deform.cleaned_data["extension"]}',
                 receiver=deform.cleaned_data['mail'])
-            
+
+            return redirect('/')
+
+        elif enform.is_valid() and ('asy_encrypt' in request.POST):
+
+            newfile = FileModel.objects.create(
+                file=enform.cleaned_data["file"])
+
+            s = asym.asymmetric_encryption(
+                filename=newfile.file.name,
+                receiver=enform.cleaned_data['mail'])
+
+            if s == 1:
+                enform.add_error('file',
+                                       "File is too big, 256 bytes maximum")
+            newfile.delete()
+            return redirect('/')
+
+        elif deform.is_valid() and ('asy_decrypt' in request.POST):
+
+            asym.asymmetric_decryption(
+                filename=f'media/{deform.cleaned_data["file"]}',
+                privkey_file=f'media/{deform.cleaned_data["key"]}',
+                file_type=f'{deform.cleaned_data["extension"]}',
+                receiver=deform.cleaned_data['mail'])
+
             return redirect('/')
 
         return render(request, self.template_name, context=self.get_context_data(

@@ -1,57 +1,82 @@
 <!DOCTYPE html>
 <html class="">
-
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <title>3NCR¥PT3D</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 
-<body>
+<body style="background-color:#040D12;">
 
 
-  <button id="ChangeType">
+  <button id="ChangeType" class="btn btn-primary">
     <h2>Change Type of Encryption</h2>
   </button>
 
 
-  <div id="symmforms" class="symm">
-    <h2>Symmetrical</h2>
-    <button id="ChangeSymm">
-      <h5>Change Type of Encryption</h5>
+  <div id="symmforms" class="symm container">
+    <h2 style="color: #93B1A6;">Symmetrical</h2>
+    <button id="ChangeSymm" class="btn btn-primary">
+      <h5>Encryption or Decryption</h5>
     </button>
     <form action="/" method="post" enctype="multipart/form-data" name="symm_en" id="ensymm" class="ensymm">
       {% csrf_token %}
-      {{ encrypt_form }}
-      <p>Submit</p>
-      <input type="submit" class="btn-primary" name="encrypt">
+      {% for field in encrypt_form %}
+      <div class="input-group mb-3">
+        {%if field.label != ''%}
+        <label class="input-group-text" for="{{ field.auto_id }}">{{ field.label }}</label>
+        {% endif %}
+        {{ field }}
+      </div>
+      {% endfor %}
+      <input type="submit" class="btn btn-primary" name="sym_encrypt">
     </form>
 
     <form action="/" method="post" enctype="multipart/form-data" name="symm_de" id="desymm" class="desymm">
       {% csrf_token %}
-      {{ decrypt_form }}
-      <p>Submit</p>
-      <input type="submit" class="btn-primary" name="decrypt">
+      {% for field in decrypt_form %}
+      <div class="input-group mb-3">
+        {%if field.label != ''%}
+        <label class="input-group-text" for="{{ field.auto_id }}">{{ field.label }}</label>
+        {% endif %}
+        {{ field }}
+      </div>
+      {% endfor %}
+      <input type="submit" class="btn btn-primary" name="sym_decrypt">
     </form>
   </div>
 
 
-  <div id="asymforms" class="asym">
-    <h2>Asymmetrical</h2>
-    <button id="ChangeAsym">
-      <h5>Change Type of Encryption</h5>
+  <div id="asymforms" class="asym container">
+    <h2 style="color: #93B1A6;">Asymmetrical</h2>
+    <button id="ChangeAsym" class="btn btn-primary">
+      <h5>Encryption or Decryption</h5>
     </button>
     <form action="/" method="post" enctype="multipart/form-data" name="symm_en" id="enasym" class="enasym">
       {% csrf_token %}
-      {{ encrypt_form }}
-      <p>Submit</p>
-      <input type="submit" class="btn-primary" name="encrypt">
+      {% for field in encrypt_form %}
+      <div class="input-group mb-3">
+        {%if field.label != ''%}
+        <label class="input-group-text" for="{{ field.auto_id }}">{{ field.label }}</label>
+        {% endif %}
+        {{ field }}
+      </div>
+      {% endfor %}
+      <input type="submit" class="btn btn-primary" name="asy_encrypt">
     </form>
 
     <form action="/" method="post" enctype="multipart/form-data" name="symm_de" id="deasym" class="deasym">
       {% csrf_token %}
-      {{ decrypt_form }}
-      <p>Submit</p>
-      <input type="submit" class="btn-primary" name="decrypt">
+      {% for field in decrypt_form %}
+      <div class="input-group mb-3">
+        {%if field.label != ''%}
+        <label class="input-group-text" for="{{ field.auto_id }}">{{ field.label }}</label>
+        {% endif %}
+        {{ field }}
+      </div>
+      {% endfor %}
+      <input type="submit" class="btn btn-primary" name="asy_decrypt">
     </form>
   </div>
 
@@ -117,14 +142,70 @@
     });
   </script>
   <style>
-    .asym {
+    html {
+      min-height: 100%;
+      display: flex;
+    }
+
+    body {
+      margin: auto;
+    }
+
+    .asym,
+    .desymm,
+    .deasym {
       display: none;
     }
-    .desymm{
-      display: none;
+
+    .form-control-lg {
+      width: 500px;
+      background-color: #5C8374;
+      border-color: #5C8374;
+      color: #93B1A6;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      padding-top: 10px;
+      padding-bottom: 10px;
     }
-    .deasym{
-      display: none;
+
+    input[type=file]::file-selector-button {
+      background-color: #5C8374;
+      border: 2px solid #5C8374;
+      color: #93B1A6;
+    }
+
+    .input-group-text {
+      background-color: #5C8374;
+      border-color: #5C8374;
+      margin-top: 15px;
+      margin-bottom: 15px;
+
+      color: #93B1A6;
+      font-size: 20px;
+      font-weight: bolder;
+    }
+
+    ::placeholder {
+      color: #93B1A6;
+    }
+
+    .btn {
+      background-color: #5C8374;
+      border-color: #5C8374;
+      color: #93B1A6;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+
+    .container {
+      align-content: center;
+      border: 3px solid #183D3D;
+      background-color: #183D3D;
+      border-radius: 10px;
+      height: 400;
+      width: 100%;
     }
   </style>
 </body>
