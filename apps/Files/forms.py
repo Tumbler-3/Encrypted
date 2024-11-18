@@ -7,6 +7,15 @@ class EncryptForm(forms.Form):
     mail = forms.EmailField(required=True, widget=forms.EmailInput(
         attrs={"class": "form-control-lg", "placeholder": "Email", "id": "floatingInputValue"}), label='')
 
+class AsymEncryptForm(forms.Form):
+    file = forms.FileField(required=True, widget=forms.FileInput(
+        attrs={"class": "form-control form-control-lg", "placeholder": "File", "id": "floatingInputValue"}), label='File')
+    key = forms.FileField(required=False, widget=forms.FileInput(
+        attrs={"class": "form-control form-control-lg", "placeholder": "Key", "id": "floatingInputValue"}), label='Key')
+    mail = forms.EmailField(required=True, widget=forms.EmailInput(
+        attrs={"class": "form-control-lg", "placeholder": "Email", "id": "floatingInputValue"}), label='')
+
+
 
 class DecryptForm(forms.Form):
     file = forms.FileField(allow_empty_file=False, required=True, widget=forms.FileInput(

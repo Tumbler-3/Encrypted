@@ -25,7 +25,8 @@ def asym_enc_send(receiver, file, pubkey, privkey):
     email = EmailMessage(subject, message, to=(receiver,))
     email.attach_file(file)
     email.attach_file(pubkey)
-    email.attach_file(privkey)
+    if privkey!=None:
+        email.attach_file(privkey)
     email.send()
 
 

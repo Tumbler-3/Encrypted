@@ -2,27 +2,35 @@ import rsa
 from apps.crypt.mail import asym_dec_send, asym_enc_send
 
 
-def asymmetric_encryption(filename, receiver):
-    public_key, private_key = rsa.newkeys(2048)
-    
+def asymmetric_encryption(filename, receiver, pubkey_file):
+    if pubkey_file==None:
+        pubkey_file, priv_key = rsa.newkeys(2048)
+        with open(f'media/{filename} public key.pem', 'wb') as pub:
+            pub.write(pubkey_file.save_pkcs1("PEM"))
+            
+        with open(f'media/{filename} private key.pem', 'wb') as priv:
+            priv.write(priv_key.save_pkcs1("PEM"))
+    else:
+        with open(f'media/{pubkey_file}', 'rb') as pub:
+            key = rsa.PublicKey.load_pkcs1(pub.read())
+            
+            
     with open(f'media/{filename}', 'rb') as file:
             inside = file.read()
     
     try:
-        encrypted_file = rsa.encrypt(inside, public_key)
+        encrypted_file = rsa.encrypt(inside, key)
     except:
         return 1
     
-    with open(f'media/{filename} public key.pem', 'wb') as pub:
-        pub.write(public_key.save_pkcs1("PEM"))
-        
-    with open(f'media/{filename} private key.pem', 'wb') as priv:
-        priv.write(private_key.save_pkcs1("PEM"))
-  
     
     with open(f'media/{filename}_encrypted', 'wb') as f:
         f.write(encrypted_file)
-    asym_enc_send(receiver=receiver, file=f'media/{filename}_encrypted', pubkey=f'media/{filename} public key.pem', privkey=f'media/{filename} private key.pem')
+    print(pubkey_file)
+    if pubkey_file == None:
+        asym_enc_send(receiver=receiver, file=f'media/{filename}_encrypted', pubkey=f'media/{filename} public key.pem', privkey=f'media/{filename} private key.pem')
+    else:
+        asym_enc_send(receiver=receiver, file=f'media/{filename}_encrypted', pubkey=f'media/{pubkey_file}', privkey=None)    
 
 
 def asymmetric_decryption(filename, file_type, privkey_file, receiver):

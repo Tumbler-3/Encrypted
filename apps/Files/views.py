@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView
 from apps.Files.models import FileModel
-from apps.Files.forms import EncryptForm, DecryptForm
+from apps.Files.forms import EncryptForm, DecryptForm, AsymEncryptForm
 from apps.crypt import symm, asym
 
 
@@ -13,19 +13,23 @@ class CryptModelView(ListView):
         context = {
             'encrypt_form': kwargs['encrypt_form'],
             'decrypt_form': kwargs['decrypt_form'],
+            'asym_enform': kwargs['asym_enform'],
         }
         return context
 
     def get(self, request, **kwargs):
         enform = EncryptForm()
         deform = DecryptForm()
+        asym_enform = AsymEncryptForm()
         return render(request, self.template_name, context=self.get_context_data(
             decrypt_form=deform,
             encrypt_form=enform,
+            asym_enform=asym_enform
         ))
 
     def post(self, request, **kwargs):
         enform = EncryptForm(request.POST, request.FILES)
+        asym_enform = AsymEncryptForm(request.POST, request.FILES)
         deform = DecryptForm(request.POST, request.FILES)
 
         if enform.is_valid() and ('sym_encrypt' in request.POST):
@@ -35,7 +39,8 @@ class CryptModelView(ListView):
 
             symm.symmetric_encryption(
                 filename=f'media/{enform.cleaned_data["file"]}',
-                receiver=enform.cleaned_data['mail'])
+                receiver=enform.cleaned_data['mail'],
+                key=f'media/{enform.cleaned_data["key"]}')
 
             return redirect('/')
 
@@ -49,18 +54,20 @@ class CryptModelView(ListView):
 
             return redirect('/')
 
-        elif enform.is_valid() and ('asy_encrypt' in request.POST):
+        elif asym_enform.is_valid() and ('asy_encrypt' in request.POST):
 
             newfile = FileModel.objects.create(
-                file=enform.cleaned_data["file"])
+                file=asym_enform.cleaned_data["file"],
+                key=asym_enform.cleaned_data["key"])
 
             s = asym.asymmetric_encryption(
                 filename=newfile.file.name,
-                receiver=enform.cleaned_data['mail'])
+                receiver=asym_enform.cleaned_data['mail'],
+                pubkey_file=newfile.key.name)
 
             if s == 1:
-                enform.add_error('file',
-                                       "File is too big, 256 bytes maximum")
+                asym_enform.add_error('file',
+                                 "File is too big, 256 bytes maximum")
             newfile.delete()
             return redirect('/')
 
@@ -77,4 +84,5 @@ class CryptModelView(ListView):
         return render(request, self.template_name, context=self.get_context_data(
             decrypt_form=deform,
             encrypt_form=enform,
+            asym_enform=asym_enform
         ))
