@@ -39,9 +39,8 @@ class CryptModelView(ListView):
 
             symm.symmetric_encryption(
                 filename=f'media/{enform.cleaned_data["file"]}',
-                receiver=enform.cleaned_data['mail'],
-                key=f'media/{enform.cleaned_data["key"]}')
-
+                receiver=enform.cleaned_data['mail'])
+            newfile.delete()
             return redirect('/')
 
         elif deform.is_valid() and ('sym_decrypt' in request.POST):
@@ -72,10 +71,14 @@ class CryptModelView(ListView):
             return redirect('/')
 
         elif deform.is_valid() and ('asy_decrypt' in request.POST):
-
+            
+            newfile = FileModel.objects.create(
+                file=asym_enform.cleaned_data["file"],
+                key=asym_enform.cleaned_data["key"])
+            
             asym.asymmetric_decryption(
-                filename=f'media/{deform.cleaned_data["file"]}',
-                privkey_file=f'media/{deform.cleaned_data["key"]}',
+                filename='media/'+newfile.file.name,
+                privkey_file='media/'+newfile.key.name,
                 file_type=f'{deform.cleaned_data["extension"]}',
                 receiver=deform.cleaned_data['mail'])
 

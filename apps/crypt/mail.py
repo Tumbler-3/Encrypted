@@ -24,7 +24,8 @@ def asym_enc_send(receiver, file, pubkey, privkey):
     message = 'Do not delete your keys. Private key is needed for decrypting.'
     email = EmailMessage(subject, message, to=(receiver,))
     email.attach_file(file)
-    email.attach_file(pubkey)
+    if pubkey!=None:
+        email.attach_file(pubkey)
     if privkey!=None:
         email.attach_file(privkey)
     email.send()
