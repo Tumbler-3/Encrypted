@@ -54,28 +54,23 @@ class CryptModelView(ListView):
             return redirect('/')
 
         elif asym_enform.is_valid() and ('asy_encrypt' in request.POST):
-
             newfile = FileModel.objects.create(
                 file=asym_enform.cleaned_data["file"],
                 key=asym_enform.cleaned_data["key"])
 
-            s = asym.asymmetric_encryption(
+            asym.asymmetric_encryption(
                 filename=newfile.file.name,
                 receiver=asym_enform.cleaned_data['mail'],
                 pubkey_file=newfile.key.name)
 
-            if s == 1:
-                asym_enform.add_error('file',
-                                 "File is too big, 256 bytes maximum")
             newfile.delete()
-            return redirect('/')
 
         elif deform.is_valid() and ('asy_decrypt' in request.POST):
-            
+
             newfile = FileModel.objects.create(
                 file=asym_enform.cleaned_data["file"],
                 key=asym_enform.cleaned_data["key"])
-            
+
             asym.asymmetric_decryption(
                 filename='media/'+newfile.file.name,
                 privkey_file='media/'+newfile.key.name,

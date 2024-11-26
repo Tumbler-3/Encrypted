@@ -16,7 +16,7 @@
 
 
   <div id="symmforms" class="symm container">
-    <h2 style="color: #f2f2f2;">Symmetrical</h2>
+    <h2 style="color: #f2f2f2;" id="nameSymm">Symmetrical Encryption</h2>
     <button id="ChangeSymm" class="btn btn-primary">
       <h5>Encryption or Decryption</h5>
     </button>
@@ -49,7 +49,7 @@
 
 
   <div id="asymforms" class="asym container">
-    <h2 style="color: #f2f2f2;">Asymmetrical</h2>
+    <h2 style="color: #f2f2f2;" id="nameAsym">Asymmetrical Encryption</h2>
     <button id="ChangeAsym" class="btn btn-primary">
       <h5>Encryption or Decryption</h5>
     </button>
@@ -60,7 +60,8 @@
         {%if field.label != ''%}
         <label class="input-group-text" for="{{ field.auto_id }}">{{ field.label }}</label>
         {% endif %}
-        {{ field }}
+        <div>{{ field }}
+        <div class="errorlist">{{ field.errors.as_text }}</div></div>
       </div>
       {% endfor %}
       <input type="submit" class="btn btn-primary" name="asy_encrypt">
@@ -89,6 +90,8 @@
     var type_button = document.getElementById("ChangeType");
     var symm_button = document.getElementById("ChangeSymm");
     var asym_button = document.getElementById("ChangeAsym");
+    var namesymm = document.getElementById("nameSymm");
+    var nameasym = document.getElementById("nameAsym");
 
 
     type_button.addEventListener("click", function () {
@@ -116,11 +119,13 @@
         enform.style.display = "block";
         deform.style.display = "none";
         symm = true
+        namesymm.innerHTML = 'Symmetrical Encryption'
       }
       else {
         enform.style.display = "none";
         deform.style.display = "block";
         symm = false;
+        namesymm.innerHTML = 'Symmetrical Decryption'
       }
     });
 
@@ -133,11 +138,13 @@
         enform.style.display = "block";
         deform.style.display = "none";
         asym = true
+        nameasym.innerHTML = 'Asymmetrical Encryption'
       }
       else {
         enform.style.display = "none";
         deform.style.display = "block";
-        asym = false;
+        asym = false
+        nameasym.innerHTML = 'Asymmetrical Decryption'
       }
     });
   </script>
@@ -158,7 +165,7 @@
     }
 
     .form-control-lg {
-      width: 500px;
+      width: 100%;
       background-color: #5C8374;
       border-color: #5C8374;
       color: #f2f2f2;
@@ -166,6 +173,14 @@
       margin-bottom: 15px;
       padding-top: 10px;
       padding-bottom: 10px;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    .errorlist{
+      display: flex;
+      position: relative;
+      color: #f2f2f2;
     }
 
     input[type=file]::file-selector-button {
